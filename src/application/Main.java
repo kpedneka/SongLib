@@ -15,10 +15,10 @@ public class Main extends Application {
 			BorderPane root = (BorderPane)loader.load();
 			ViewController controller = loader.getController();
 			controller.start(primaryStage);
+			
 			Scene scene = new Scene(root, 400, 300);
 			primaryStage.setTitle("Song Library");
 			primaryStage.setScene(scene);
-			primaryStage.setResizable(true);
 			primaryStage.show(); 
 		} catch(Exception e) {
 			e.printStackTrace();
