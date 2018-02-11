@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import application.view.ViewController;
 
-public class Main extends Application {
+public class SongLib extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {

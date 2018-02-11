@@ -8,6 +8,10 @@ import java.util.Scanner;
 import application.model.Song;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -23,7 +27,8 @@ public class ViewController {
 	private ListView<Song> songList;
 	@FXML
 	Text sTitle, sArtist, sAlbum, sYear;
-	
+	@FXML
+	Button editButton;
 	
 	/**
 	 * Initializes the ListView with song objects from a text file specified in the function
@@ -50,7 +55,7 @@ public class ViewController {
 			}
 			
 		});
-		// set the listview to display our song list
+		// set the ListView to display our song list
 		songList.setItems(obsList);
 		// what does the cell factory do?
 		songList.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>(){
@@ -86,7 +91,6 @@ public class ViewController {
 	public void displayDetails() {
 		if (songList.getSelectionModel().getSelectedIndex() < 0)
 			return;
-		   
 		Song s = songList.getSelectionModel().getSelectedItem();
 		// update the VBox to show the details of the song that is selected
 		sTitle.setText("\t"+ s.getTitle());
@@ -95,10 +99,10 @@ public class ViewController {
 		sYear.setText("\t"+s.getYear());
 	}
 	/**
-	 * 
+	 * ActionEvent triggered function that adds a song to the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
-	public void addSong() throws FileNotFoundException {
+	public void addSong(ActionEvent evt) throws FileNotFoundException {
 		Scanner scanner  =  new Scanner(new FileReader(filename));
 		// need to get input from text label
 		// need to append info to file
@@ -107,10 +111,10 @@ public class ViewController {
 		scanner.close();
 	}
 	/**
-	 * 
+	 * ActionEvent triggered function that edits a song in the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
-	public void editSong() throws FileNotFoundException {
+	public void editSong(ActionEvent evt) throws FileNotFoundException {
 		Scanner scanner  =  new Scanner(new FileReader(filename));
 		// need to get input from text label
 		// need to replace the old line in the file
@@ -119,14 +123,29 @@ public class ViewController {
 		scanner.close();
 	}
 	/**
-	 * 
+	 * ActionEvent triggered function that deletes a song from the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
-	public void deleteSong() throws FileNotFoundException {
-		Scanner scanner  =  new Scanner(new FileReader(filename));
-		// need to get input from text label
+	public void deleteSong(ActionEvent evt) throws FileNotFoundException {
+		Scanner scanner = new Scanner(new FileReader(filename));
+
+		// show dialog only if list is empty
+		if (obsList.isEmpty()) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText("Cannot delete song");
+			alert.setContentText("List is empty or no song selected");
+
+			alert.showAndWait();
+		} else {
+			// remove song from ArrayList and update ListView
+			Song s = songList.getSelectionModel().getSelectedItem();
+			if (obsList.contains(s)) {
+				obsList.remove(s);
+			}
+			songList.setItems(obsList);
+		}
 		// need to delete the old line in the file, ensure no blank spaces
-		// not necessary to have album or year, but it is necessary to have song and artist
 		// update ListView
 		scanner.close();
 	}
