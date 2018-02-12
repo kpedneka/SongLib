@@ -1,3 +1,7 @@
+//THINGS TO DO:
+//refresh the list after editing a song
+//select the newly added song after adding a song
+//make all changes in the txt file
 
 package application.view;
 
@@ -108,10 +112,45 @@ public class ViewController {
 	 */
 	public void addSong(ActionEvent evt) throws FileNotFoundException {
 		Scanner scanner  =  new Scanner(new FileReader(filename));
-		// need to get input from text label
-		// need to append info to file
-		// not necessary to have album or year, but it is necessary to have song and artist
-		// update ListView
+		sTitle.setText("");
+		sArtist.setText("");
+		sAlbum.setText("");
+		sYear.setText("");
+
+		
+		okay.setOnAction(new EventHandler<ActionEvent>()
+				{
+				@Override
+				public void handle(ActionEvent e)
+				{
+					
+					String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
+					
+					if(error.equalsIgnoreCase("no error"))
+					{
+					Song s2 = new Song(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
+					obsList.add(s2);
+					FXCollections.sort(obsList, new Comparator<Song>() {
+						@Override
+						public int compare(Song song1, Song song2) {
+							return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
+						}
+						
+					});
+								
+						displayDetails();
+					}
+					else
+					{
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("Warning Dialog");
+						alert.setContentText(error);
+
+						alert.showAndWait();
+					}
+						
+				}
+				});		
 		scanner.close();
 	}
 	/**
@@ -156,7 +195,13 @@ public class ViewController {
 						
 				}
 				});		
-		
+		FXCollections.sort(obsList, new Comparator<Song>() {
+			@Override
+			public int compare(Song song1, Song song2) {
+				return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
+			}
+			
+		});
 		displayDetails();
 		// need to replace the old line in the file
 		scanner.close();
