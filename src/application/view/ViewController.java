@@ -117,6 +117,7 @@ public class ViewController {
 	 */
 	public void editSong(ActionEvent evt) throws FileNotFoundException {
 		Scanner scanner  =  new Scanner(new FileReader(filename));
+		
 		// need to get input from text label
 		// need to replace the old line in the file
 		// not necessary to have album or year, but it is necessary to have song and artist
@@ -141,8 +142,24 @@ public class ViewController {
 		} else {
 			// remove song from ArrayList and update ListView
 			Song s = songList.getSelectionModel().getSelectedItem();
+			int index = songList.getSelectionModel().getSelectedIndex();
 			if (obsList.contains(s)) {
 				obsList.remove(s);
+				if (obsList.isEmpty()) {
+					   sTitle.setText("");
+					   sArtist.setText("");
+					   sAlbum.setText("");
+					   sYear.setText("");
+				   }
+				  else if(index == obsList.size()-1)
+				   {
+					   songList.getSelectionModel().select(index--);
+				   }
+				   else
+				   {
+					   songList.getSelectionModel().select(index++);
+				   }
+				   displayDetails();
 			}
 			songList.setItems(obsList);
 		}
