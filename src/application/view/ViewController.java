@@ -1,3 +1,4 @@
+
 package application.view;
 
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ import javafx.scene.control.Button;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.text.Text;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -26,7 +27,7 @@ public class ViewController {
 	@FXML
 	private ListView<Song> songList;
 	@FXML
-	Text sTitle, sArtist, sAlbum, sYear;
+	TextField sTitle, sArtist, sAlbum, sYear;
 	@FXML
 	Button editButton;
 	
