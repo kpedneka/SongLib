@@ -1,6 +1,8 @@
 //THINGS TO DO:
 //you can edit even after pressing the okay button, until the edit button is exited by clicking somewhere else
 //make all changes in the txt file
+//cancel
+//end events. after okay is pressed, add event should end
 
 package application.view;
 
@@ -36,7 +38,8 @@ public class ViewController {
 	Button editButton;
 	@FXML
 	Button okay;
-	
+	@FXML
+	Button cancel;
 	/**
 	 * Initializes the ListView with song objects from a text file specified in the function
 	 * @param primaryStage is the stage that is passed in from Main.java

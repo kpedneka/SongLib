@@ -16,7 +16,7 @@ public class SongLib extends Application {
 			ViewController controller = loader.getController();
 			controller.start(primaryStage);
 			
-			Scene scene = new Scene(root, 400, 300);
+			Scene scene = new Scene(root, 450, 350);
 			primaryStage.setTitle("Song Library");
 			primaryStage.setScene(scene);
 			primaryStage.show(); 

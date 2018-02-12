@@ -120,11 +120,20 @@
                   </TextField>
                </children>
             </HBox>
-            <Button fx:id="okay" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="OK">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="150.0" right="10.0" top="50.0" />
-               </VBox.margin>
-            </Button>
+            <HBox prefHeight="50.0" prefWidth="177.0">
+               <children>
+                  <Button fx:id="cancel" cancelButton="true" mnemonicParsing="false" prefHeight="19.0" prefWidth="94.0" text="CANCEL">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="10.0" top="50.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="okay" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="19.0" prefWidth="94.0" text="DONE">
+                     <HBox.margin>
+                        <Insets bottom="20.0" left="50.0" right="20.0" top="50.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </right>
