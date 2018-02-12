@@ -10,6 +10,7 @@ import application.model.Song;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -30,6 +31,8 @@ public class ViewController {
 	TextField sTitle, sArtist, sAlbum, sYear;
 	@FXML
 	Button editButton;
+	@FXML
+	Button okay;
 	
 	/**
 	 * Initializes the ListView with song objects from a text file specified in the function
@@ -118,10 +121,44 @@ public class ViewController {
 	public void editSong(ActionEvent evt) throws FileNotFoundException {
 		Scanner scanner  =  new Scanner(new FileReader(filename));
 		
-		// need to get input from text label
+		if (obsList.isEmpty()) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setContentText("List is empty. No song to edit");
+
+			alert.showAndWait();
+		} 
+		Song s1 = songList.getSelectionModel().getSelectedItem();
+		
+		okay.setOnAction(new EventHandler<ActionEvent>()
+				{
+				@Override
+				public void handle(ActionEvent e)
+				{
+					
+					String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
+					
+					if(error.equalsIgnoreCase("no error"))
+					{
+					s1.setTitle(sTitle.getText());
+					s1.setArtist(sArtist.getText());
+					s1.setAlbum(sAlbum.getText());
+					s1.setYear(sYear.getText());
+					}
+					else
+					{
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("Warning Dialog");
+						alert.setContentText(error);
+
+						alert.showAndWait();
+					}
+						
+				}
+				});		
+		
+		displayDetails();
 		// need to replace the old line in the file
-		// not necessary to have album or year, but it is necessary to have song and artist
-		// update ListView
 		scanner.close();
 	}
 	/**
@@ -141,9 +178,9 @@ public class ViewController {
 			alert.showAndWait();
 		} else {
 			// remove song from ArrayList and update ListView
-			Song s = songList.getSelectionModel().getSelectedItem();
+		Song s = songList.getSelectionModel().getSelectedItem();
 			int index = songList.getSelectionModel().getSelectedIndex();
-			if (obsList.contains(s)) {
+		if (obsList.contains(s)) {
 				obsList.remove(s);
 				if (obsList.isEmpty()) {
 					   sTitle.setText("");
@@ -167,4 +204,32 @@ public class ViewController {
 		// update ListView
 		scanner.close();
 	}
+	
+	//check if the input strings are valid
+	public String Validity(String t, String ar, String al, String yr)
+	{
+		if(t.isEmpty()||ar.isEmpty())
+			return "Title or Artist cannot be left empty";
+		else if((!yr.trim().isEmpty()) && (!yr.trim().matches("[0-9]+")))
+				   return "Year must only contain numbers.";
+		else if ((!yr.trim().isEmpty())&&(yr.trim().length() != 4))
+				   return "Year must be 4 digits long.";
+		else if(!UniqueFields(t, ar))
+			return "Title and Artist already exist";
+		else
+		return "no error";
+	}
+	
+	//check for repetitions by comparing title and artist
+	public boolean UniqueFields(String t, String ar)
+	{
+		for (Song s : obsList) 
+			{	   
+				   if (s.getTitle().toLowerCase().equals(t.toLowerCase()) && s.getArtist().toLowerCase().equals(ar.toLowerCase()))
+					   return false;		   
+			}
+		return true;
+
+	}
+	
 }
