@@ -1,5 +1,5 @@
 //THINGS TO DO:
-//refresh the list after editing a song
+//you can edit even after pressing the okay button, until the edit button is exited by clicking somewhere else
 //select the newly added song after adding a song
 //make all changes in the txt file
 
@@ -183,6 +183,15 @@ public class ViewController {
 					s1.setArtist(sArtist.getText());
 					s1.setAlbum(sAlbum.getText());
 					s1.setYear(sYear.getText());
+					FXCollections.sort(obsList, new Comparator<Song>() {
+						@Override
+						public int compare(Song song1, Song song2) {
+							return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
+						}
+						
+					});
+					displayDetails();
+					
 					}
 					else
 					{
@@ -195,14 +204,6 @@ public class ViewController {
 						
 				}
 				});		
-		FXCollections.sort(obsList, new Comparator<Song>() {
-			@Override
-			public int compare(Song song1, Song song2) {
-				return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
-			}
-			
-		});
-		displayDetails();
 		// need to replace the old line in the file
 		scanner.close();
 	}
