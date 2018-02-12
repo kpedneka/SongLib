@@ -1,6 +1,5 @@
 //THINGS TO DO:
 //you can edit even after pressing the okay button, until the edit button is exited by clicking somewhere else
-//select the newly added song after adding a song
 //make all changes in the txt file
 
 package application.view;
@@ -137,7 +136,24 @@ public class ViewController {
 						}
 						
 					});
-								
+					if (obsList.size() == 1) {
+						   songList.getSelectionModel().select(0);
+					   }
+					   else
+					   {
+						   int i = 0;
+						   for(Song s: obsList)
+						   {
+							   
+							   if(s == s2)
+							   {
+								  songList.getSelectionModel().select(i);
+								  break;
+							   }
+							   
+							   i++;
+						   }
+					   }
 						displayDetails();
 					}
 					else
@@ -153,6 +169,8 @@ public class ViewController {
 				});		
 		scanner.close();
 	}
+	
+	
 	/**
 	 * ActionEvent triggered function that edits a song in the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
