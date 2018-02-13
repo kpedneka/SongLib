@@ -119,11 +119,7 @@ public class ViewController {
 	 */
 	private void writeToFile(ObservableList<Song> obsList) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-<<<<<<< HEAD
 	//	System.out.println("In function call writeToFile");
-=======
-		System.out.println("In function call writeToFile");
->>>>>>> 4cf5b9c22cb5620206aaf46f2fb87a35217b9a13
 		// overwrite the whole file
 		for (Song s : obsList) {
 			writer.write(s.getTitle()+", "+s.getArtist()+", "+s.getAlbum()+", "+s.getYear());
