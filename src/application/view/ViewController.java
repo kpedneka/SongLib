@@ -6,8 +6,11 @@
 
 package application.view;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Scanner;
@@ -111,11 +114,24 @@ public class ViewController {
 		sYear.setText("\t"+s.getYear());
 	}
 	/**
+	 * @param obsList the ArrayList that we will write to the file 
+	 * @throws IOException 
+	 */
+	private void writeToFile(ObservableList<Song> obsList) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+		System.out.println("In function call writeToFile");
+		// overwrite the whole file
+		for (Song s : obsList) {
+			writer.write(s.getTitle()+", "+s.getArtist()+", "+s.getAlbum()+", "+s.getYear());
+			writer.newLine();
+		}
+		writer.close();
+	}
+	/**
 	 * ActionEvent triggered function that adds a song to the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
-	public void addSong(ActionEvent evt) throws FileNotFoundException {
-		Scanner scanner  =  new Scanner(new FileReader(filename));
+	public void addSong(ActionEvent evt) {
 		sTitle.setText("");
 		sArtist.setText("");
 		sAlbum.setText("");
@@ -160,6 +176,13 @@ public class ViewController {
 						}
 					}
 					displayDetails();
+					// persist changes
+					try {
+						writeToFile(obsList);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				else
 				{
@@ -171,8 +194,7 @@ public class ViewController {
 				}
 
 			}
-		});		
-		scanner.close();
+		});
 	}
 
 
@@ -180,8 +202,7 @@ public class ViewController {
 	 * ActionEvent triggered function that edits a song in the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
-	public void editSong(ActionEvent evt) throws FileNotFoundException {
-		Scanner scanner  =  new Scanner(new FileReader(filename));
+	public void editSong(ActionEvent evt) {
 
 		if (obsList.isEmpty()) {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -214,7 +235,13 @@ public class ViewController {
 
 					});
 					displayDetails();
-
+					// persist changes
+					try {
+						writeToFile(obsList);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				else
 				{
@@ -227,15 +254,12 @@ public class ViewController {
 
 			}
 		});		
-		// need to replace the old line in the file
-		scanner.close();
 	}
 	/**
 	 * ActionEvent triggered function that deletes a song from the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
-	public void deleteSong(ActionEvent evt) throws FileNotFoundException {
-		Scanner scanner = new Scanner(new FileReader(filename));
+	public void deleteSong(ActionEvent evt) {
 
 		// show dialog only if list is empty
 		if (obsList.isEmpty()) {
@@ -288,9 +312,13 @@ public class ViewController {
 			
 		}
 	
-		// need to delete the old line in the file, ensure no blank spaces
-		// update ListView
-		scanner.close();
+		// persist changes
+		try {
+			writeToFile(obsList);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	//check if the input strings are valid
