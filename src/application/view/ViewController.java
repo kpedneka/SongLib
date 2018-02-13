@@ -9,6 +9,7 @@ package application.view;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Scanner;
 
 import application.model.Song;
@@ -19,6 +20,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -63,36 +65,36 @@ public class ViewController {
 			public int compare(Song song1, Song song2) {
 				return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
 			}
-			
+
 		});
 		// set the ListView to display our song list
 		songList.setItems(obsList);
 		// what does the cell factory do?
 		songList.setCellFactory(new Callback<ListView<Song>, ListCell<Song>>(){
-            @Override
-            public ListCell<Song> call(ListView<Song> p) {
-                ListCell<Song> cell = new ListCell<Song>(){
-                    @Override
-                    protected void updateItem(Song s, boolean bln) {
-                        super.updateItem(s, bln);
-                        if (s != null) {
-                        	// here we are setting the song name and title that we see in the list
-                            setText(s.getTitle()+", "+s.getArtist());
-                        }
-                        else if (s == null) {
-                        	setText(null);
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
-		
+			@Override
+			public ListCell<Song> call(ListView<Song> p) {
+				ListCell<Song> cell = new ListCell<Song>(){
+					@Override
+					protected void updateItem(Song s, boolean bln) {
+						super.updateItem(s, bln);
+						if (s != null) {
+							// here we are setting the song name and title that we see in the list
+							setText(s.getTitle()+", "+s.getArtist());
+						}
+						else if (s == null) {
+							setText(null);
+						}
+					}
+				};
+				return cell;
+			}
+		});
+
 		// select the first item
-	    if (!obsList.isEmpty())
-	    		songList.getSelectionModel().select(0);
-	    // show the selected song
-	    displayDetails();
+		if (!obsList.isEmpty())
+			songList.getSelectionModel().select(0);
+		// show the selected song
+		displayDetails();
 	}
 	/**
 	 * Gets the selected song and updates the FXML Text boxes
@@ -119,17 +121,17 @@ public class ViewController {
 		sAlbum.setText("");
 		sYear.setText("");
 
-		
+
 		okay.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent e)
+			{
+
+				String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
+
+				if(error.equalsIgnoreCase("no error"))
 				{
-				@Override
-				public void handle(ActionEvent e)
-				{
-					
-					String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
-					
-					if(error.equalsIgnoreCase("no error"))
-					{
 					Song s2 = new Song(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
 					obsList.add(s2);
 					FXCollections.sort(obsList, new Comparator<Song>() {
@@ -137,50 +139,50 @@ public class ViewController {
 						public int compare(Song song1, Song song2) {
 							return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
 						}
-						
+
 					});
 					if (obsList.size() == 1) {
-						   songList.getSelectionModel().select(0);
-					   }
-					   else
-					   {
-						   int i = 0;
-						   for(Song s: obsList)
-						   {
-							   
-							   if(s == s2)
-							   {
-								  songList.getSelectionModel().select(i);
-								  break;
-							   }
-							   
-							   i++;
-						   }
-					   }
-						displayDetails();
+						songList.getSelectionModel().select(0);
 					}
 					else
 					{
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle("Warning Dialog");
-						alert.setContentText(error);
+						int i = 0;
+						for(Song s: obsList)
+						{
 
-						alert.showAndWait();
+							if(s == s2)
+							{
+								songList.getSelectionModel().select(i);
+								break;
+							}
+
+							i++;
+						}
 					}
-						
+					displayDetails();
 				}
-				});		
+				else
+				{
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Warning Dialog");
+					alert.setContentText(error);
+
+					alert.showAndWait();
+				}
+
+			}
+		});		
 		scanner.close();
 	}
-	
-	
+
+
 	/**
 	 * ActionEvent triggered function that edits a song in the song library
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
 	public void editSong(ActionEvent evt) throws FileNotFoundException {
 		Scanner scanner  =  new Scanner(new FileReader(filename));
-		
+
 		if (obsList.isEmpty()) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning Dialog");
@@ -189,17 +191,17 @@ public class ViewController {
 			alert.showAndWait();
 		} 
 		Song s1 = songList.getSelectionModel().getSelectedItem();
-		
+
 		okay.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent e)
+			{
+
+				String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
+
+				if(error.equalsIgnoreCase("no error"))
 				{
-				@Override
-				public void handle(ActionEvent e)
-				{
-					
-					String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
-					
-					if(error.equalsIgnoreCase("no error"))
-					{
 					s1.setTitle(sTitle.getText());
 					s1.setArtist(sArtist.getText());
 					s1.setAlbum(sAlbum.getText());
@@ -209,22 +211,22 @@ public class ViewController {
 						public int compare(Song song1, Song song2) {
 							return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
 						}
-						
+
 					});
 					displayDetails();
-					
-					}
-					else
-					{
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle("Warning Dialog");
-						alert.setContentText(error);
 
-						alert.showAndWait();
-					}
-						
 				}
-				});		
+				else
+				{
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Warning Dialog");
+					alert.setContentText(error);
+
+					alert.showAndWait();
+				}
+
+			}
+		});		
 		// need to replace the old line in the file
 		scanner.close();
 	}
@@ -243,60 +245,79 @@ public class ViewController {
 			alert.setContentText("List is empty or no song selected");
 
 			alert.showAndWait();
-		} else {
+		} 
+		else 
+		{
 			// remove song from ArrayList and update ListView
-		Song s = songList.getSelectionModel().getSelectedItem();
+			Song s = songList.getSelectionModel().getSelectedItem();
 			int index = songList.getSelectionModel().getSelectedIndex();
-		if (obsList.contains(s)) {
-				obsList.remove(s);
-				if (obsList.isEmpty()) {
-					   sTitle.setText("");
-					   sArtist.setText("");
-					   sAlbum.setText("");
-					   sYear.setText("");
-				   }
-				  else if(index == obsList.size()-1)
-				   {
-					   songList.getSelectionModel().select(index--);
-				   }
-				   else
-				   {
-					   songList.getSelectionModel().select(index++);
-				   }
-				   displayDetails();
+			if (obsList.contains(s)) 
+			{
+				Alert alert = 
+						new Alert(AlertType.INFORMATION);
+				alert.setTitle("Delete Item");
+				alert.setHeaderText(
+						"Press OK to confirm or the cross to cancel");
+
+				String content = "Are you sure you want to delete " + s.getTitle() + "?";
+
+				alert.setContentText(content);
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.isPresent()) 
+				{
+					obsList.remove(s);
+					if (obsList.isEmpty()) {
+						sTitle.setText("");
+						sArtist.setText("");
+						sAlbum.setText("");
+						sYear.setText("");
+					}
+					else if(index == obsList.size()-1)
+					{
+						songList.getSelectionModel().select(index--);
+					}
+					else
+					{
+						songList.getSelectionModel().select(index++);
+					}
+					displayDetails();
+					songList.setItems(obsList);
+				}		
 			}
-			songList.setItems(obsList);
+			
 		}
+	
 		// need to delete the old line in the file, ensure no blank spaces
 		// update ListView
 		scanner.close();
 	}
-	
+
 	//check if the input strings are valid
 	public String Validity(String t, String ar, String al, String yr)
 	{
 		if(t.isEmpty()||ar.isEmpty())
 			return "Title or Artist cannot be left empty";
 		else if((!yr.trim().isEmpty()) && (!yr.trim().matches("[0-9]+")))
-				   return "Year must only contain numbers.";
+			return "Year must only contain numbers.";
 		else if ((!yr.trim().isEmpty())&&(yr.trim().length() != 4))
-				   return "Year must be 4 digits long.";
+			return "Year must be 4 digits long.";
 		else if(!UniqueFields(t, ar))
 			return "Title and Artist already exist";
 		else
-		return "no error";
+			return "no error";
 	}
-	
+
 	//check for repetitions by comparing title and artist
 	public boolean UniqueFields(String t, String ar)
 	{
 		for (Song s : obsList) 
-			{	   
-				   if (s.getTitle().toLowerCase().equals(t.toLowerCase()) && s.getArtist().toLowerCase().equals(ar.toLowerCase()))
-					   return false;		   
-			}
+		{	   
+			if (s.getTitle().toLowerCase().equals(t.toLowerCase()) && s.getArtist().toLowerCase().equals(ar.toLowerCase()))
+				return false;		   
+		}
 		return true;
 
 	}
-	
+
 }
