@@ -1,3 +1,4 @@
+//when edit is pressed when the list is empty the cancel and okay buttons do not disappear after the alert message
 
 package application.view;
 
@@ -100,7 +101,17 @@ public class ViewController {
 	 */
 	public void displayDetails() {
 		if (songList.getSelectionModel().getSelectedIndex() < 0)
+		{
+
+			cancel.setVisible(false);
+			okay.setVisible(false);
+			sTitle.setText("");
+			sArtist.setText("");
+			sAlbum.setText("");
+			sYear.setText("");
 			return;
+		}
+			
 		Song s = songList.getSelectionModel().getSelectedItem();
 		// update the VBox to show the details of the song that is selected
 		sTitle.setText("\t"+ s.getTitle());
@@ -136,6 +147,12 @@ public class ViewController {
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
 	public void addSong(ActionEvent evt) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Information");
+		alert.setContentText("Enter Details to add a new song");
+
+		alert.showAndWait();
+
 		sTitle.setText("");
 		sArtist.setText("");
 		sAlbum.setText("");
@@ -143,7 +160,7 @@ public class ViewController {
 		
 		cancel.setVisible(true);
 		okay.setVisible(true);
-
+		
 		okay.setOnAction(new EventHandler<ActionEvent>()
 		{
 			@Override
@@ -201,6 +218,12 @@ public class ViewController {
 
 			}
 		});
+		cancel.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				displayDetails();
+			}
+		});
 	}
 
 
@@ -215,11 +238,12 @@ public class ViewController {
 	 */
 	public void editSong(ActionEvent evt) {
 
-		if (obsList.isEmpty()) {
+		if (obsList.isEmpty())
+		{
+			//System.out.println(songList.getSelectionModel().getSelectedIndex());
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning Dialog");
 			alert.setContentText("List is empty. No song to edit");
-
 			alert.showAndWait();
 		}
 		
@@ -231,7 +255,14 @@ public class ViewController {
 		okay.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
+				String error;
+				Song s4 = songList.getSelectionModel().getSelectedItem();
+			if(sTitle.getText().trim().toLowerCase().equals(s4.getTitle().toLowerCase())&&sArtist.getText().trim().toLowerCase().equals(s4.getArtist().toLowerCase())&&sAlbum.getText().trim().toLowerCase().equals(s4.getAlbum().toLowerCase())&&sYear.getText().trim().toLowerCase().equals(s4.getYear().toLowerCase()))
+					error = "no changes made";
+			//	if(sTitle.getText().trim().toLowerCase().equals(s4.getTitle().toLowerCase())&&sArtist.getText().trim().toLowerCase().equals(s4.getArtist().toLowerCase()))
+				//	error = "no error";
+				else
+				error= ValidityforEdit(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
 				if(error.equalsIgnoreCase("no error")) {
 					s1.setTitle(sTitle.getText());
 					s1.setArtist(sArtist.getText());
@@ -277,7 +308,6 @@ public class ViewController {
 	 * if list is empty, an alert is shown, displaying an appropriate message
 	 * An alert also pops up to confirm if the suer wants to delete the song
 	 * if the user presses ok, the song is deleted
-	 * to cancel the action the user must press the cross on the alert box
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
 	public void deleteSong(ActionEvent evt) {
@@ -344,10 +374,11 @@ public class ViewController {
 
 	/**Checks if the input entered by the user is valid or not
 	 * 
-	 * @param t is the title of the song. The title must be present
+	 * @param t is the title of the song. The title must be present.
 	 * @param ar is the artist of the song. The artist of the song must be present
 	 * @param al is the album of the song
 	 * @param yr is the year of the song. The year must be only integers and only 4 characters long
+	 * Checks for repetition by comparing title and artist
 	 * @return appropriate message if above conditions are not met. Else return no error
 	 */
 	public String Validity(String t, String ar, String al, String yr)
@@ -367,6 +398,31 @@ public class ViewController {
 		else
 			return "no error";
 	}
+	
+	/**Checks if the input entered by the user is valid or not
+	 * @param t is the title of the song. The title must be present
+	 * @param ar is the artist of the song. The artist of the song must be present
+	 * @param al is the album of the song
+	 * @param yr is the year of the song. The year must be only integers and only 4 characters long
+	 * Does not check for uniqueness of title and artist since title and artist could be the same while editing year and album
+	 * @return appropriate message if above conditions are not met. Else return no error
+	 */
+	public String ValidityforEdit(String t, String ar, String al, String yr)
+	{
+		//checks if user has entered title and artist
+		if(t.isEmpty()||ar.isEmpty())
+			return "Title or Artist cannot be left empty";
+		//checks if the characters in the year are all digits
+		else if((!yr.trim().isEmpty()) && (!yr.trim().matches("[0-9]+")))
+			return "Year must only contain numbers.";
+		//checks if the year has only 4 digits
+		else if ((!yr.trim().isEmpty())&&(yr.trim().length() != 4))
+			return "Year must be 4 digits long.";
+		//compares the title and artist to ensure no repetitions exist
+		else
+			return "no error";
+	}
+
 
 	/** Check for repetitions by comparing title and artist. Strings are converted to lower case to make the comparison case-insensitive
 	 * 
