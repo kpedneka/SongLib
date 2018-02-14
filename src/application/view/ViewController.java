@@ -1,8 +1,3 @@
-//THINGS TO DO:
-//you can edit even after pressing the okay button, until the edit button is exited by clicking somewhere else
-//make all changes in the txt file
-//cancel
-//end events. after okay is pressed, add event should end
 
 package application.view;
 
@@ -116,7 +111,7 @@ public class ViewController {
 		cancel.setVisible(false);
 		okay.setVisible(false);
 	}
-	/**
+	/** Updates the file with the changes made in the list by the user
 	 * @param obsList the ArrayList that we will write to the file 
 	 * @throws IOException 
 	 */
@@ -132,6 +127,12 @@ public class ViewController {
 	}
 	/**
 	 * ActionEvent triggered function that adds a song to the song library
+	 * The cancel and done button appear when the user triggers the add button
+	 * The song details are cleared for the user to enter new song details. 
+	 * Checks are made to ensure user does not enter repetitions and atleast the title and the artist of the song is entered
+	 * The song is added to the list in alphabetical order when the user presses done
+	 * The newly entered song is selected.
+	 * The done and cancel button disappear
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
 	public void addSong(ActionEvent evt) {
@@ -205,6 +206,11 @@ public class ViewController {
 
 	/**
 	 * ActionEvent triggered function that edits a song in the song library
+	 * if list is empty alert box pops up displaying appropriate message
+	 * cancel and done buttons appear when the user triggers the edit button
+	 * once the user enters the edited song and presses ok, the changes reflect in the list 
+	 * the song is placed in the list in alphabetically order
+	 * the cancel and ok buttons disappear
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
 	public void editSong(ActionEvent evt) {
@@ -268,6 +274,10 @@ public class ViewController {
 	}
 	/**
 	 * ActionEvent triggered function that deletes a song from the song library
+	 * if list is empty, an alert is shown, displaying an appropriate message
+	 * An alert also pops up to confirm if the suer wants to delete the song
+	 * if the user presses ok, the song is deleted
+	 * to cancel the action the user must press the cross on the alert box
 	 * @throws FileNotFoundException when the file to append the newly added song does not exist
 	 */
 	public void deleteSong(ActionEvent evt) {
@@ -332,22 +342,38 @@ public class ViewController {
 		}
 	}
 
-	//check if the input strings are valid
+	/**Checks if the input entered by the user is valid or not
+	 * 
+	 * @param t is the title of the song. The title must be present
+	 * @param ar is the artist of the song. The artist of the song must be present
+	 * @param al is the album of the song
+	 * @param yr is the year of the song. The year must be only integers and only 4 characters long
+	 * @return appropriate message if above conditions are not met. Else return no error
+	 */
 	public String Validity(String t, String ar, String al, String yr)
 	{
+		//checks if user has entered title and artist
 		if(t.isEmpty()||ar.isEmpty())
 			return "Title or Artist cannot be left empty";
+		//checks if the characters in the year are all digits
 		else if((!yr.trim().isEmpty()) && (!yr.trim().matches("[0-9]+")))
 			return "Year must only contain numbers.";
+		//checks if the year has only 4 digits
 		else if ((!yr.trim().isEmpty())&&(yr.trim().length() != 4))
 			return "Year must be 4 digits long.";
+		//compares the title and artist to ensure no repetitions exist
 		else if(!UniqueFields(t, ar))
 			return "Title and Artist already exist";
 		else
 			return "no error";
 	}
 
-	//check for repetitions by comparing title and artist
+	/** Check for repetitions by comparing title and artist. Strings are converted to lower case to make the comparison case-insensitive
+	 * 
+	 * @param t is the title of the song
+	 * @param ar is the artist of the song
+	 * @return false if the song already exists and true if the song does not exist
+	 */
 	public boolean UniqueFields(String t, String ar)
 	{
 		for (Song s : obsList) 
