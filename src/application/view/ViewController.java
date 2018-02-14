@@ -112,6 +112,9 @@ public class ViewController {
 		sArtist.setText("\t"+s.getArtist());
 		sAlbum.setText("\t"+s.getAlbum());
 		sYear.setText("\t"+s.getYear());
+		// remove visibility for cancel and done buttons
+		cancel.setVisible(false);
+		okay.setVisible(false);
 	}
 	/**
 	 * @param obsList the ArrayList that we will write to the file 
@@ -136,7 +139,9 @@ public class ViewController {
 		sArtist.setText("");
 		sAlbum.setText("");
 		sYear.setText("");
-
+		
+		cancel.setVisible(true);
+		okay.setVisible(true);
 
 		okay.setOnAction(new EventHandler<ActionEvent>()
 		{
@@ -213,7 +218,10 @@ public class ViewController {
 		}
 		
 		Song s1 = songList.getSelectionModel().getSelectedItem();
-
+		
+		cancel.setVisible(true);
+		okay.setVisible(true);
+		
 		okay.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -254,6 +262,7 @@ public class ViewController {
 				sArtist.setText(s1.getArtist());
 				sAlbum.setText(s1.getAlbum());
 				sYear.setText(s1.getYear());
+				displayDetails();
 			}
 		});
 	}
