@@ -260,10 +260,10 @@ public class ViewController {
 				Song s4 = songList.getSelectionModel().getSelectedItem();
 			if(sTitle.getText().trim().toLowerCase().equals(s4.getTitle().toLowerCase())&&sArtist.getText().trim().toLowerCase().equals(s4.getArtist().toLowerCase())&&sAlbum.getText().trim().toLowerCase().equals(s4.getAlbum().toLowerCase())&&sYear.getText().trim().toLowerCase().equals(s4.getYear().toLowerCase()))
 					error = "no changes made";
-			//	if(sTitle.getText().trim().toLowerCase().equals(s4.getTitle().toLowerCase())&&sArtist.getText().trim().toLowerCase().equals(s4.getArtist().toLowerCase()))
-				//	error = "no error";
-				else
+			else if(sTitle.getText().trim().toLowerCase().equals(s4.getTitle().toLowerCase())&&sArtist.getText().trim().toLowerCase().equals(s4.getArtist().toLowerCase()))
 				error= ValidityforEdit(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
+				else
+				error= Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
 				if(error.equalsIgnoreCase("no error")) {
 					s1.setTitle(sTitle.getText());
 					s1.setArtist(sArtist.getText());
@@ -399,15 +399,17 @@ public class ViewController {
 		else
 			return "no error";
 	}
-	
+
 	/**Checks if the input entered by the user is valid or not
-	 * @param t is the title of the song. The title must be present
+	 * 
+	 * @param t is the title of the song. The title must be present.
 	 * @param ar is the artist of the song. The artist of the song must be present
 	 * @param al is the album of the song
 	 * @param yr is the year of the song. The year must be only integers and only 4 characters long
-	 * Does not check for uniqueness of title and artist since title and artist could be the same while editing year and album
+	 * Does not compare artist and title since they are equal to the selected song
 	 * @return appropriate message if above conditions are not met. Else return no error
 	 */
+
 	public String ValidityforEdit(String t, String ar, String al, String yr)
 	{
 		//checks if user has entered title and artist
@@ -423,7 +425,6 @@ public class ViewController {
 		else
 			return "no error";
 	}
-
 
 	/** Check for repetitions by comparing title and artist. Strings are converted to lower case to make the comparison case-insensitive
 	 * 
