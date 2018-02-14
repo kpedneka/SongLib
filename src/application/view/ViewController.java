@@ -210,19 +210,15 @@ public class ViewController {
 			alert.setContentText("List is empty. No song to edit");
 
 			alert.showAndWait();
-		} 
+		}
+		
 		Song s1 = songList.getSelectionModel().getSelectedItem();
 
-		okay.setOnAction(new EventHandler<ActionEvent>()
-		{
+		okay.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent e)
-			{
-
+			public void handle(ActionEvent e) {
 				String error = Validity(sTitle.getText().trim(), sArtist.getText().trim(), sAlbum.getText().trim(),sYear.getText().trim());
-
-				if(error.equalsIgnoreCase("no error"))
-				{
+				if(error.equalsIgnoreCase("no error")) {
 					s1.setTitle(sTitle.getText());
 					s1.setArtist(sArtist.getText());
 					s1.setAlbum(sAlbum.getText());
@@ -239,21 +235,27 @@ public class ViewController {
 					try {
 						writeToFile(obsList);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
-				else
-				{
+				else {
 					Alert alert = new Alert(AlertType.WARNING);
 					alert.setTitle("Warning Dialog");
 					alert.setContentText(error);
-
 					alert.showAndWait();
 				}
-
 			}
-		});		
+		});
+		
+		cancel.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				sTitle.setText(s1.getTitle());
+				sArtist.setText(s1.getArtist());
+				sAlbum.setText(s1.getAlbum());
+				sYear.setText(s1.getYear());
+			}
+		});
 	}
 	/**
 	 * ActionEvent triggered function that deletes a song from the song library
@@ -340,7 +342,7 @@ public class ViewController {
 	public boolean UniqueFields(String t, String ar)
 	{
 		for (Song s : obsList) 
-		{	   
+		{
 			if (s.getTitle().toLowerCase().equals(t.toLowerCase()) && s.getArtist().toLowerCase().equals(ar.toLowerCase()))
 				return false;		   
 		}
