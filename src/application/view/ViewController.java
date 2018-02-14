@@ -1,4 +1,3 @@
-//when edit is pressed when the list is empty the cancel and okay buttons do not disappear after the alert message
 
 package application.view;
 
@@ -245,6 +244,8 @@ public class ViewController {
 			alert.setTitle("Warning Dialog");
 			alert.setContentText("List is empty. No song to edit");
 			alert.showAndWait();
+			displayDetails();
+			return;
 		}
 		
 		Song s1 = songList.getSelectionModel().getSelectedItem();
@@ -318,8 +319,8 @@ public class ViewController {
 			alert.setTitle("Warning Dialog");
 			alert.setHeaderText("Cannot delete song");
 			alert.setContentText("List is empty or no song selected");
-
 			alert.showAndWait();
+			return;
 		} 
 		else 
 		{
