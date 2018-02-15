@@ -1,2 +1,1 @@
-wer, aaa, , 
-wer, wert, wert, 1234
+wer, aaa

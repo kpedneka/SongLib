@@ -51,9 +51,15 @@ public class ViewController {
 		Scanner scanner  =  new Scanner(new FileReader(filename));
 		while(scanner.hasNextLine())
 		{
+			Song song;
 			String line = scanner.nextLine();
 			String splits[] = line.split(", ");
-			Song song = new Song(splits[0],splits[1], splits[2], splits[3]);
+			if(splits.length==2)
+			song = new Song(splits[0],splits[1],"","");
+			else if(splits.length==3)
+				song = new Song(splits[0],splits[1],splits[2],"");
+			else
+				song = new Song(splits[0],splits[1],splits[2],splits[3]);
 			obsList.add(song);
 		}
 		scanner.close();
