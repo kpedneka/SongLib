@@ -175,6 +175,9 @@ public class ViewController {
 					FXCollections.sort(obsList, new Comparator<Song>() {
 						@Override
 						public int compare(Song song1, Song song2) {
+							if(song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase())==0)
+								return song1.getArtist().toLowerCase().compareTo(song2.getArtist().toLowerCase());
+							else
 							return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
 						}
 
@@ -272,8 +275,11 @@ public class ViewController {
 					FXCollections.sort(obsList, new Comparator<Song>() {
 						@Override
 						public int compare(Song song1, Song song2) {
+							if(song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase())==0)
+								return song1.getArtist().toLowerCase().compareTo(song2.getArtist().toLowerCase());
+							else
 							return song1.getTitle().toLowerCase().compareTo(song2.getTitle().toLowerCase());
-						}
+							}
 
 					});
 					displayDetails();
