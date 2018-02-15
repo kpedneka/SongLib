@@ -7,6 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import application.view.ViewController;
 
+/**
+ * 
+ * @author Kunal Pednekar (ksp101)
+ * @author Rachana Thanawala (rt468)
+ *
+ */
 public class SongLib extends Application {
 	@Override
 	public void start(Stage primaryStage) {

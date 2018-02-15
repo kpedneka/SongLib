@@ -26,6 +26,12 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+/**
+ * 
+ * @author Kunal Pednekar (ksp101)
+ * @author Rachana Thanawala (rt468)
+ *
+ */
 public class ViewController {
 	// our array of songs that we will display in the GUI
 	private ObservableList<Song> obsList;

@@ -1,5 +1,11 @@
 package application.model;
 
+/**
+ * 
+ * @author Kunal Pednekar (ksp101)
+ * @author Rachana Thanawala (rt468)
+ *
+ */
 public class Song {
 	
 	private String title;
@@ -13,6 +19,7 @@ public class Song {
 		artist=ar;
 		album=al;
 		year=y;
+		
 	}
 	
 	public String getTitle()
